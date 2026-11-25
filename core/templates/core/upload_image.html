@@ -1,0 +1,288 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Upload Leaf Image | CropMind AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #f0f7f2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #194b35;
+        }
+
+        .upload-card {
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            background: white;
+            border-radius: 22px;
+            box-shadow: 0 15px 45px rgba(30, 80, 50, 0.12);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #26754d;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            color: #6b8174;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .upload-area {
+            border: 2px dashed #86b99a;
+            border-radius: 16px;
+            padding: 35px 20px;
+            text-align: center;
+            background: #f7fbf8;
+            margin-bottom: 22px;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            color: #456b55;
+        }
+
+        .submit-btn {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 15px;
+            background: #26754d;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-btn:hover {
+            background: #1b5c3b;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #26754d;
+            text-decoration: none;
+        }
+
+        @media (max-width: 500px) {
+            .upload-card {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <main class="upload-card">
+
+        <div class="logo">🌱 CropMind AI</div>
+
+        <h1>Crop Disease Detection</h1>
+        {% if success %}
+        <div style="background:#dff5e5; color:#17683a;
+                padding:12px; border-radius:8px;
+                margin:15px 0;">
+        {{ success }}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div style="background:#ffe5e5; color:#a12626;
+                padding:12px; border-radius:8px;
+                margin:15px 0;">
+        {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if prediction %}
+        <div style="background:#e8f7ed; padding:20px;
+                border-radius:12px; margin:20px 0;">
+
+        <h2 style="color:#17683a;">AI Prediction Result</h2>
+        {% if uploaded_image %}
+         <img
+         src="{{ uploaded_image.image.url }}"
+         alt="Uploaded tomato leaf"
+         style="width:100%; max-width:350px;
+               height:auto; border-radius:12px;
+               margin:15px 0;"
+         >
+        {% endif %}
+        {% if symptoms or causes or prevention or management %}
+
+<div style="background:#ffffff; padding:25px;
+            border-radius:15px; margin:20px 0;
+            box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+
+    <h2 style="color:#17683a;">🌱 Disease Information & Treatment</h2>
+
+    {% if symptoms %}
+    <h3>🔍 Symptoms</h3>
+    <p>{{ symptoms|linebreaksbr }}</p>
+    {% endif %}
+
+    {% if causes %}
+    <h3>🦠 Causes</h3>
+    <p>{{ causes|linebreaksbr }}</p>
+    {% endif %}
+
+    {% if prevention %}
+    <h3>🛡️ Prevention</h3>
+    <p>{{ prevention|linebreaksbr }}</p>
+    {% endif %}
+
+    {% if management %}
+    <h3>💊 Management & Treatment</h3>
+    <p>{{ management|linebreaksbr }}</p>
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+        <p><strong>Predicted Disease:</strong> {{ prediction }}</p>
+        <p><strong>Confidence Score:</strong> {{ confidence }}%</p>
+
+
+        <div style="width:100%; max-width:350px;
+            height:12px; background:#dce9df;
+            border-radius:20px; overflow:hidden;
+            margin-top:10px;">
+
+        
+        <div style="width:{{ confidence }}%;
+            height:100%;
+            background:#218653;
+            border-radius:20px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:10px;
+            font-weight:bold;
+            white-space:nowrap;">
+        {{ confidence }}%
+        </div>
+
+
+        </div>
+
+
+         </div>
+        {% endif %}
+
+        <p class="description">
+            Upload a clear image of a crop leaf.
+            CropMind AI will use this image as the input
+            for the disease detection process.
+        </p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="upload-area">
+                <div class="upload-icon">📷</div>
+
+                <h3>Select Crop Leaf Image</h3>
+
+                <p style="margin-top: 10px; color: #718579;">
+                    Choose a JPG, JPEG or PNG image
+                </p>
+
+                
+             <input
+            type="file"
+            id="leaf_image"
+            name="leaf_image"
+            accept="image/jpeg,image/png,image/webp"
+            required
+            >
+
+        <img
+        id="imagePreview"
+        alt="Selected crop leaf preview"
+        style="display:none; width:100%; max-height:300px;
+           object-fit:contain; margin-top:20px;
+           border-radius:12px; border:1px solid #dce9df;"
+        >
+
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Upload Leaf Image
+            </button>
+        </form>
+
+        <a href="{% url 'dashboard' %}" class="back-link">
+            ← Back to Dashboard
+        </a>
+
+    </main>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const imageInput = document.getElementById('leaf_image');
+    const imagePreview = document.getElementById('imagePreview');
+
+    if (!imageInput || !imagePreview) {
+        console.error('Image input or preview element not found.');
+        return;
+    }
+
+    imageInput.addEventListener('change', function () {
+        const file = this.files[0];
+
+        if (file && file.type.startsWith('image/')) {
+            imagePreview.src = URL.createObjectURL(file);
+            imagePreview.style.display = 'block';
+        } else {
+            imagePreview.removeAttribute('src');
+            imagePreview.style.display = 'none';
+        }
+    });
+});
+</script>
+</body>
+</html>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Virtual Environment
+venv/
+.venv/
+
+# Django
+staticfiles/
+
+# Environment Secrets
+.env
+
+# Database
+db.sqlite3
+
+# Dataset
+training_data/
+dataset_split/
+dataset/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+
+# User Uploaded Media
+media/

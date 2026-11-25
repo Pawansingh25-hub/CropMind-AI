@@ -1,0 +1,36 @@
+{
+    "test_accuracy": 92.06,
+    "test_images": 819,
+    "class_names": [
+        "Tomato___Early_blight",
+        "Tomato___Late_blight",
+        "Tomato___Leaf_Mold",
+        "Tomato___healthy"
+    ],
+    "confusion_matrix": [
+        [
+            137,
+            7,
+            6,
+            0
+        ],
+        [
+            31,
+            240,
+            10,
+            6
+        ],
+        [
+            0,
+            4,
+            139,
+            0
+        ],
+        [
+            0,
+            1,
+            0,
+            238
+        ]
+    ]
+}
